@@ -145,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
             conflicts.add(clicked);
         }
     }
+
     // No conflict
     public void unsetConflict() {
         Set<CustomButton> remove = new HashSet<>();
