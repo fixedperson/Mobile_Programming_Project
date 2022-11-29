@@ -3,6 +3,7 @@ package com.example.sudoku;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.util.HashSet;
@@ -47,15 +49,10 @@ public class MainActivity extends AppCompatActivity {
         lp4.setMargins(15, 15, 0, 0);
 
         tableRows = new TableRow[9];
-        for(int i = 0; i < 9; i++){
+        for(int i = 0; i < 9; i++) {
             tableRows[i] = new TableRow(this);
             table.addView(tableRows[i]);
         }
-
-        dialog = new Dialog(MainActivity.this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_memo);
-
         buttons = new CustomButton[9][9];
         for (int row = 0; row < 9; row++) {
             for (int col = 0; col < 9; col++) {
@@ -71,6 +68,14 @@ public class MainActivity extends AppCompatActivity {
                 buttons[row][col].setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View view) {
+                        CustomButton temp = (CustomButton) view;
+                        if(temp.value > 0) return false;
+
+                        dialog = new Dialog(MainActivity.this);
+                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        dialog.setContentView(R.layout.dialog_memo);
+                        dialog.show();
+
                         dialogMemo(view);
                         return true;
                     }
@@ -118,10 +123,12 @@ public class MainActivity extends AppCompatActivity {
         String s = btn.getText().toString();
         if(s.matches("^[1-9]$")) {
             clicked.set(Integer.parseInt(s));
+            memoDelete(clicked);
             setConflict();
         }
         else if(s.equals("DEL")) {
             clicked.set(0);
+            memoDelete(clicked);
             clicked.textView.setBackgroundResource(R.drawable.button_selector);
         }
         unsetConflict();
@@ -206,13 +213,54 @@ public class MainActivity extends AppCompatActivity {
             conflicts.remove(btn);
         }
     }
+
     public void dialogMemo(View view){
-        dialog.show();
+        int k = 0;
+        TableLayout memoLayout = dialog.findViewById(R.id.memobtns);
+        ToggleButton[] memos = new ToggleButton[9];
+        for(int i = 0; i < 3; i++) {
+            TableRow tableRow = (TableRow) memoLayout.getChildAt(i);
+            for(int j = 0; j < 3; j++, k++) {
+                memos[k] = (ToggleButton) tableRow.getChildAt(j);
+            }
+        }
 
+        Button del = dialog.findViewById(R.id.del);
+        Button cancel = dialog.findViewById(R.id.cancel);
+        Button ok = dialog.findViewById(R.id.ok);
 
+        del.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                memoDelete(view);
+                dialog.dismiss();
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CustomButton temp = (CustomButton) view;
+                for(int i = 0; i < 9; i++){
+                    if(memos[i].isChecked()) temp.memos[i].setVisibility(View.VISIBLE);
+                    else temp.memos[i].setVisibility(View.INVISIBLE);
+                }
+                dialog.dismiss();
+            }
+        });
+    }
+
+    public void memoDelete(View view){
         CustomButton temp = (CustomButton) view;
         for(int i = 0; i < 9; i++){
-            if(memos[i].isChecked()) temp.memos[i].setVisibility(View.VISIBLE);
+            temp.memos[i].setVisibility(View.INVISIBLE);
         }
     }
 }
