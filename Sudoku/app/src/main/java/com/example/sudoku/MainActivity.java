@@ -2,12 +2,15 @@ package com.example.sudoku;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.ToggleButton;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -18,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
     CustomButton clicked;
     TableRow[] tableRows;
     CustomButton[][] buttons;
+
+    Dialog dialog;
 
     Set<CustomButton> conflicts = new HashSet<>();
 
@@ -47,6 +52,10 @@ public class MainActivity extends AppCompatActivity {
             table.addView(tableRows[i]);
         }
 
+        dialog = new Dialog(MainActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_memo);
+
         buttons = new CustomButton[9][9];
         for (int row = 0; row < 9; row++) {
             for (int col = 0; col < 9; col++) {
@@ -56,6 +65,14 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         clicked = (CustomButton) view;
                         numberPad.setVisibility(View.VISIBLE);
+                    }
+                });
+
+                buttons[row][col].setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
+                        dialogMemo(view);
+                        return true;
                     }
                 });
 
@@ -187,6 +204,15 @@ public class MainActivity extends AppCompatActivity {
         for(CustomButton btn : remove) {
             btn.textView.setBackgroundResource(R.drawable.button_selector);
             conflicts.remove(btn);
+        }
+    }
+    public void dialogMemo(View view){
+        dialog.show();
+
+
+        CustomButton temp = (CustomButton) view;
+        for(int i = 0; i < 9; i++){
+            if(memos[i].isChecked()) temp.memos[i].setVisibility(View.VISIBLE);
         }
     }
 }
