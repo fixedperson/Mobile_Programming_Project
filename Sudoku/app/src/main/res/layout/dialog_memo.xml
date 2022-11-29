@@ -138,7 +138,7 @@
                 android:id="@+id/textView12"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="                             "
+                android:text="                                    "
                 tools:ignore="SpeakableTextPresentCheck" />
 
             <Button
