@@ -11,6 +11,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -225,9 +226,13 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        Button del = dialog.findViewById(R.id.del);
-        Button cancel = dialog.findViewById(R.id.cancel);
-        Button ok = dialog.findViewById(R.id.ok);
+        TextView del = dialog.findViewById(R.id.del);
+        TextView cancel = dialog.findViewById(R.id.cancel);
+        TextView ok = dialog.findViewById(R.id.ok);
+
+        del.setBackgroundResource(R.drawable.dialog_selector);
+        cancel.setBackgroundResource(R.drawable.dialog_selector);
+        ok.setBackgroundResource(R.drawable.dialog_selector);
 
         del.setOnClickListener(new View.OnClickListener() {
             @Override
