@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
         Random rd = new Random();
 
-        int cnt = 20;
+        int cnt = 1;
         while(cnt > 0){
             int r = rd.nextInt(9);
             int c = rd.nextInt(9);
@@ -134,6 +134,16 @@ public class MainActivity extends AppCompatActivity {
         }
         unsetConflict();
         numberPad.setVisibility(View.GONE);
+
+        if(isSuccess() && conflicts.size() == 0){
+            for(int i = 0; i < 9; i++){
+                for(int j = 0; j < 9; j++){
+                    buttons[i][j].setOnClickListener(null);
+                    buttons[i][j].setClickable(false);
+                    buttons[i][j].textView.setBackgroundColor(Color.GREEN);
+                }
+            }
+        }
     }
 
     // Conflict
@@ -267,5 +277,14 @@ public class MainActivity extends AppCompatActivity {
         for(int i = 0; i < 9; i++){
             temp.memos[i].setVisibility(View.INVISIBLE);
         }
+    }
+
+    public boolean isSuccess(){
+        for(int i = 0; i < 9; i++){
+            for(int j = 0; j < 9; j++){
+                if(buttons[i][j].value == 0) return false;
+            }
+        }
+        return true;
     }
 }
