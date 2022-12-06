@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
         Random rd = new Random();
 
-        int cnt = 1;
+        int cnt = 20;
         while(cnt > 0){
             int r = rd.nextInt(9);
             int c = rd.nextInt(9);
