@@ -6,9 +6,11 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -95,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
 
         Random rd = new Random();
 
-        int cnt = 20;
+        int cnt = 1;
         while(cnt > 0){
             int r = rd.nextInt(9);
             int c = rd.nextInt(9);
@@ -116,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        Toast.makeText(getApplicationContext(), "남은 숫자 : " + blank(), Toast.LENGTH_LONG).show();
     }
 
     public void onClickNum1(View v) {
@@ -143,6 +146,11 @@ public class MainActivity extends AppCompatActivity {
                     buttons[i][j].textView.setBackgroundColor(Color.GREEN);
                 }
             }
+            Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
+        }
+
+        else {
+            Toast.makeText(getApplicationContext(), "남은 숫자 : " + blank(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -286,5 +294,15 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return true;
+    }
+
+    public int blank(){
+        int temp = 0;
+        for(int i = 0; i < 9; i++){
+            for(int j = 0; j < 9; j++){
+                if(buttons[i][j].value == 0) temp++;
+            }
+        }
+        return temp;
     }
 }
